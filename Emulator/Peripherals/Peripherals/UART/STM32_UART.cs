@@ -112,7 +112,7 @@ namespace Emul8.Peripherals.UART
 
         private void Update()
         {
-            IRQ.Set((controlRegister1 & (uint)ControlRegister1.TXEInterruptEnable) != 0 || charFifo.Count > 0);
+            IRQ.Set((controlRegister1 & (uint)ControlRegister1.TXEInterruptEnable) != 0 || charFifo.Count > 0 || ((charFifo.Count == 0) && (controlRegister1 & (uint)ControlRegister1.TCInterruptEnable) != 0));
         }
 
         private readonly Queue<byte> charFifo;
@@ -135,6 +135,7 @@ namespace Emul8.Peripherals.UART
         [Flags]
         private enum ControlRegister1 : uint
         {
+	    TCInterruptEnable 	= (1u << 6),
             TXEInterruptEnable  = (1u << 7),
             ParitySelection     = (1u << 9),
             ParityControlEnable = (1u << 10),
