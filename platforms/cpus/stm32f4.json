@@ -62,10 +62,10 @@
         "size":0x100
       }
     },
-    /* "_irq":
+     "_irq":
        {
        "nvic":[38]
-       }*/
+       }
   },
   "uart3":
   {
@@ -78,10 +78,10 @@
         "size":0x100
       }
     },
-    /* "_irq":
+    "_irq":
        {
        "nvic":[39]
-       }*/
+       }
   },
   "uart4":
   {
@@ -330,7 +330,7 @@
     "_type":"DMA.STM32DMA",
     "_connection":
     {
-      "sysbus": {"address": 0x40026000}
+      "sysbus": {"address": 0x40026000, "size": 0x3FF}
     },
     "_irq":
     {
@@ -342,7 +342,7 @@
     "_type":"DMA.STM32DMA",
     "_connection":
     {
-      "sysbus": {"address": 0x40026400}
+      "sysbus": {"address": 0x40026400, "size": 0x7FF}
     },
     "_irq":
     {

@@ -59,6 +59,18 @@ namespace Emul8.Peripherals.UART
                 case Register.Control2:
                     controlRegister2 = value;
                     return;
+		case Register.Control3:
+		    transmissionComplete = ((controlRegister3 & (1u << 7)) != 0) && ((value & (1u << 7)) == 0) ? true : transmissionComplete;
+
+		    /*if (((controlRegister3 & (1u << 6)) != 0) && ((value & (1u << 6)) == 0)) {
+			    while(charFifo.Count > 0)
+				    charFifo.Dequeue();
+
+			    IRQ.Unset();
+		    }*/
+
+		    controlRegister3 = value;
+		    return;
                 case Register.BaudRate:
                     baudRate = value;
                     return;
@@ -88,6 +100,8 @@ namespace Emul8.Peripherals.UART
                         return returnValue;
                     case Register.Control1:
                         return controlRegister1;
+		    case Register.Control3:
+			return controlRegister3;
                     default:
                         this.LogUnhandledRead(offset);
                         return 0u;
@@ -121,6 +135,7 @@ namespace Emul8.Peripherals.UART
         private bool transmissionComplete;
         private uint controlRegister1;
         private uint controlRegister2;
+	private uint controlRegister3;
         private uint baudRate;
 
         private enum Register : long
@@ -129,6 +144,7 @@ namespace Emul8.Peripherals.UART
             Data     = 0x04,
             Control1 = 0x0C,
             Control2 = 0x10,
+	    Control3 = 0x14,
             BaudRate = 0x08
         }
 

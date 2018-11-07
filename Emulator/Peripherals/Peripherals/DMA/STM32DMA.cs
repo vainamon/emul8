@@ -49,8 +49,8 @@ namespace Emul8.Peripherals.DMA
             default:
                 if(offset >= StreamOffsetStart && offset <= StreamOffsetEnd)
                 {
-                    offset -= StreamOffsetStart;
-                    return streams[offset / 0x14].Read(offset % 0x14);
+		    offset -= StreamOffsetStart;
+                    return streams[offset / 0x18].Read(offset % 0x18);
                 }
                 this.LogUnhandledRead(offset);
                 return 0;
@@ -177,8 +177,11 @@ namespace Emul8.Peripherals.DMA
                     return memory0Address;
                 case Registers.Memory1Address:
                     return memory1Address;
+		case Registers.FIFOControl:
+		    // return reset value
+		    return 0x21;
                 default:
-                    parent.Log(LogLevel.Warning, "Unexpected read access to not implemented register (offset 0x{0:X}, value 0x{1:X}).", offset);
+                    parent.Log(LogLevel.Warning, "Unexpected read access to not implemented register (offset 0x{0:X}, value unknown.", offset);
                     return 0;
                 }
             }
@@ -202,6 +205,8 @@ namespace Emul8.Peripherals.DMA
                 case Registers.Memory1Address:
                     memory1Address = value;
                     break;
+		case Registers.FIFOControl:
+		    break;
                 default:
                     parent.Log(LogLevel.Warning, "Unexpected write access to not implemented register (offset 0x{0:X}, value 0x{1:X}).", offset, value);
                     break;
@@ -295,7 +300,7 @@ namespace Emul8.Peripherals.DMA
                 }
                 if((value & 1) != 0)
                 {
-                    DoTransfer();
+                   DoTransfer();
                 }
             }
 
